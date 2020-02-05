@@ -20,9 +20,9 @@ class StreamDetector:
 
     def get_inference(self):
         stream = cv2.VideoCapture(self.stream_url)
-        print(stream.get(cv2.CAP_PROP_FPS))
         detector = Detector(10,0.4)
         frame_counter = 0
+
         while stream.isOpened():
             valid_frame , frame = stream.read()
             if(valid_frame):

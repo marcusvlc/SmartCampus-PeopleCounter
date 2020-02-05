@@ -1,1 +1,71 @@
-<img src="http://localhost:8080/couting/?url=rtsp%3A%2F%2F10.30.0.183%3A554%2Fuser%3Dsuporte%26password%3D12345678%26channel%3D3%26stream%3D1.sdp%3F"/>
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Demo Stream</title>
+    <link href="https://fonts.googleapis.com/css?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <script>
+        const encodedUrl = "rtsp%3A%2F%2F10.30.0.183%3A554%2Fuser%3Dsuporte%26password%3D12345678%26channel%3D2%26stream%3D1.sdp%3F"
+    
+        const getStream = () => {
+            const URL_TO_FETCH = `http://localhost:8080/couting/?url=${encodedUrl}`; fetch(URL_TO_FETCH, { 
+                    method: 'get'})
+                    .then(function(response) { 
+                        let img = document.getElementById("streaming")
+                        img.src = response.url
+                    })
+                    .catch(function(err) { console.error(err); });
+        }
+
+        const closeStream = () => {
+          const DEFAULT_IMG_URL = "https://www12.senado.leg.br/jovemsenador/home/imagens/carregando/image"
+          let img = document.getElementById("streaming")
+          img.src = DEFAULT_IMG_URL
+        }
+     
+        getStream()
+    </script>
+
+    <style>
+      #streaming {
+      position: absolute;
+      margin: auto;
+      top: 10%;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border:12px #1c87c9;
+      border-style: dashed;
+      background-color: #eee;
+      }
+
+      body {
+        background-color: aqua;
+      }
+
+      h1 {
+        font-family: 'Bebas Neue', cursive;
+        text-align: center;
+        font-size: 6em;
+        color: azure;
+        -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: black;
+      }
+
+      
+
+
+    </style>
+
+  </head>
+  <body>
+    <h1>Smart Campus People Couting</h1>
+    <img id="streaming" src="https://www12.senado.leg.br/jovemsenador/home/imagens/carregando/image"/>
+    <button onclick="closeStream()">Cancelar</button>
+  </body>
+</html>
+

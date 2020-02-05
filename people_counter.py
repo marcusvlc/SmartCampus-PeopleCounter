@@ -134,7 +134,7 @@ class Detector:
 		# moving 'up' or 'down'
 		cv2.line(frame, (0, self.H // 2), (self.W, self.H // 2), (0, 255, 255), 2)
 
-		cv2.line(frame, (self.W // 2, 0), (self.W // 2, self.H), (0, 255, 255), 2)
+		#cv2.line(frame, (self.W // 2, 0), (self.W // 2, self.H), (0, 255, 255), 2)
 
 		# use the centroid tracker to associate the (1) old object
 		# centroids with (2) the newly computed object centroids
@@ -159,23 +159,24 @@ class Detector:
 				# 'up' and positive for 'down')
 				y = [c[1] for c in to.centroids]
 				direction = centroid[1] - np.mean(y)
+				print(direction)
 				to.centroids.append(centroid)
 
 				# check to see if the object has been counted or not
-				if not to.counted:
-					# if the direction is negative (indicating the object
-					# is moving up) AND the centroid is above the center
-					# line, count the object
-					if direction < 0 and centroid[1] < self.H // 2:
-						self.totalUp += 1
-						to.counted = True
+				# if not to.counted:
+				# 	# if the direction is negative (indicating the object
+				# 	# is moving up) AND the centroid is above the center
+				# 	# line, count the object
+				# 	if direction < 0 and centroid[1] < self.H // 2:
+				# 		self.totalUp += 1
+				# 		to.counted = True
 
-					# if the direction is positive (indicating the object
-					# is moving down) AND the centroid is below the
-					# center line, count the object
-					elif direction > 0 and centroid[1] > self.H // 2:
-						self.totalDown += 1
-						to.counted = True
+				# 	# if the direction is positive (indicating the object
+				# 	# is moving down) AND the centroid is below the
+				# 	# center line, count the object
+				# 	elif direction > 0 and centroid[1] > self.H // 2:
+				# 		self.totalDown += 1
+				# 		to.counted = True
 
 			# store the trackable object in our dictionary
 			self.trackableObjects[objectID] = to
