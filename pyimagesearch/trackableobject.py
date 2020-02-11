@@ -8,3 +8,6 @@ class TrackableObject:
 		# initialize a boolean used to indicate if the object has
 		# already been counted or not
 		self.counted = False
+
+	def __str__(self):
+		return f'ID: {self.objectID} Centroids: {self.centroids}'

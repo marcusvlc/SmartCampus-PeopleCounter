@@ -33,7 +33,7 @@ class Detector:
 
 	def __init__(self, skip_frames, confidence):
 		self.net = cv2.dnn.readNetFromCaffe(self.DETECTOR_PROTO_PATH, self.DETECTOR_MODEL_PATH)
-		self.ct = CentroidTracker(maxDisappeared=40, maxDistance=50)
+		self.ct = CentroidTracker(maxDisappeared=50, maxDistance=400)
 		self.skip_frames = skip_frames
 		self.confidence = confidence
 		self.W = None
@@ -132,9 +132,9 @@ class Detector:
 		# draw a horizontal line in the center of the frame -- once an
 		# object crosses this line we will determine whether they were
 		# moving 'up' or 'down'
-		cv2.line(frame, (0, self.H // 2), (self.W, self.H // 2), (0, 255, 255), 2)
+		#cv2.line(frame, (0, self.H // 2), (self.W, self.H // 2), (0, 255, 255), 2)
 
-		#cv2.line(frame, (self.W // 2, 0), (self.W // 2, self.H), (0, 255, 255), 2)
+		cv2.line(frame, (self.W // 2, 0), (self.W // 2, self.H), (0, 255, 255), 2)
 
 		# use the centroid tracker to associate the (1) old object
 		# centroids with (2) the newly computed object centroids
@@ -159,24 +159,33 @@ class Detector:
 				# 'up' and positive for 'down')
 				y = [c[1] for c in to.centroids]
 				direction = centroid[1] - np.mean(y)
-				print(direction)
 				to.centroids.append(centroid)
 
 				# check to see if the object has been counted or not
-				# if not to.counted:
-				# 	# if the direction is negative (indicating the object
-				# 	# is moving up) AND the centroid is above the center
-				# 	# line, count the object
-				# 	if direction < 0 and centroid[1] < self.H // 2:
-				# 		self.totalUp += 1
-				# 		to.counted = True
+				if not to.counted:
+					if(len(to.centroids) >= 2):
+						for c in range(len(to.centroids)-1):
+							if(to.centroids[c][0] > (self.W // 2) and centroid[0] < (self.W // 2)):
+								self.totalUp += 1
+								to.counted = True
+								break
+							if(to.centroids[c][0] < (self.W // 2) and centroid[0] > (self.W // 2)):
+								self.totalDown += 1
+								to.counted = True
+								break
+					# # if the direction is negative (indicating the object
+					# # is moving up) AND the centroid is above the center
+					# # line, count the object
+					# if direction < 0 and centroid[0] < self.W // 2:
+					# 	self.totalUp += 1
+					# 	to.counted = True
 
-				# 	# if the direction is positive (indicating the object
-				# 	# is moving down) AND the centroid is below the
-				# 	# center line, count the object
-				# 	elif direction > 0 and centroid[1] > self.H // 2:
-				# 		self.totalDown += 1
-				# 		to.counted = True
+					# # if the direction is positive (indicating the object
+					# # is moving down) AND the centroid is below the
+					# # center line, count the object
+					# elif direction > 0 and centroid[0] > self.W // 2:
+					# 	self.totalDown += 1
+					# 	to.counted = True
 
 			# store the trackable object in our dictionary
 			self.trackableObjects[objectID] = to
@@ -202,6 +211,6 @@ class Detector:
 			cv2.putText(frame, text, (10, self.H - ((i * 20) + 20)),
 				cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
 
-		cv2.waitKey(3000)
+		cv2.waitKey(25)
 
 		return frame
