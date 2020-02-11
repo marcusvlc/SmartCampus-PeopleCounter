@@ -15,7 +15,7 @@ blueprint = Blueprint('main', __name__, static_folder='static')
 
 @blueprint.route("/404")
 def deploy_test():
-    return "Not found"
+    return Response("{'error':'Page not Found'}", status=404, mimetype='application/json')
 
 @blueprint.route("/couting/")
 def people_couting_from_stream():
