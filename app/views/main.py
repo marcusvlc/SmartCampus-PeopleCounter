@@ -13,6 +13,10 @@ from ..stream_detector import StreamDetector
 blueprint = Blueprint('main', __name__, static_folder='static')
 
 
+@blueprint.route("/hello")
+def deploy_test():
+    return "Deploy test route."
+
 @blueprint.route("/couting/")
 def people_couting_from_stream():
     url_video = request.args.get('url')
