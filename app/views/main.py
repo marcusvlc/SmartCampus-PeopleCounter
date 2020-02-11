@@ -13,9 +13,9 @@ from ..stream_detector import StreamDetector
 blueprint = Blueprint('main', __name__, static_folder='static')
 
 
-@blueprint.route("/hello")
+@blueprint.route("/404")
 def deploy_test():
-    return "Deploy test route."
+    return "Not found"
 
 @blueprint.route("/couting/")
 def people_couting_from_stream():
